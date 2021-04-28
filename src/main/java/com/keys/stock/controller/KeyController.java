@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,7 +42,18 @@ public class KeyController {
 	public Key save(@RequestBody Key key) {
 		return keyRepository.save(key);
 	}
-	
+
+	@PutMapping("{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public Key update(@PathVariable Long id, @RequestBody Key keyUpdate) {
+		return keyRepository.findById(id).map(key -> {
+			key.setModel(keyUpdate.getModel());
+			key.setType(keyUpdate.getType());
+			key.setQuantity(keyUpdate.getQuantity());
+			return keyRepository.save(key);
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+	}
+
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {

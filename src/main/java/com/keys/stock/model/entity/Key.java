@@ -24,7 +24,8 @@ public class Key {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String modelo;
-	private Integer quantidade;
+	private String model;
+	private String type;
+	private Integer quantity;
 
 }
